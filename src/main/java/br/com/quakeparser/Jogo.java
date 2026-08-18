@@ -32,7 +32,7 @@ public class Jogo {
         jogadores.get(atacante).adicionarKill();
     }
 
-    private void adicionarJogador(String nome) {
+    public void adicionarJogador(String nome) {
         if (!"<world>".equals(nome)) {
             jogadores.putIfAbsent(nome, new Jogador(nome));
         }

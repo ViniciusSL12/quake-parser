@@ -11,6 +11,10 @@ public class ParserQuake {
         "^\\s*\\S+\\s+Kill:\\s+\\d+\\s+\\d+\\s+\\d+:\\s+(.+?) killed (.+?) by .+$"
     );
 
+    private static final Pattern PADRAO_JOGADOR = Pattern.compile(
+        "^\\s*\\S+\\s+ClientUserinfoChanged:\\s+\\d+\\s+n\\\\(.+?)\\\\t.*$"
+    );
+
     public List<Jogo> processar(List<String> linhas) {
         List<Jogo> jogos = new ArrayList<>();
         Jogo jogoAtual = null;
@@ -26,6 +30,14 @@ public class ParserQuake {
             }
 
             if (jogoAtual == null) {
+                continue;
+            }
+
+            Matcher jogadorMatcher = PADRAO_JOGADOR.matcher(linha);
+
+            if (jogadorMatcher.matches()) {
+                String nomeJogador = jogadorMatcher.group(1).trim();
+                jogoAtual.adicionarJogador(nomeJogador);
                 continue;
             }
 

@@ -14,7 +14,7 @@ class ParserQuakeTest {
     void deveCriarUmaPartida() {
         List<Jogo> jogos = parser.processar(List.of(
                 "0:00 InitGame:",
-                "0:10 Kill: 2 3 10: Alpha killed Bravo by MOD_RAILGUN"
+                "0:10 Kill: 2 3 10: Alfa killed Bravo by MOD_RAILGUN"
         ));
 
         assertEquals(1, jogos.size());
@@ -25,8 +25,8 @@ class ParserQuakeTest {
     void deveContarTodasAsMortes() {
         Jogo jogo = parser.processar(List.of(
                 "0:00 InitGame:",
-                "0:10 Kill: 2 3 10: Alpha killed Bravo by MOD_RAILGUN",
-                "0:20 Kill: 4 2 10: Charlie killed Alpha by MOD_ROCKET",
+                "0:10 Kill: 2 3 10: Alfa killed Bravo by MOD_RAILGUN",
+                "0:20 Kill: 4 2 10: Charlie killed Alfa by MOD_ROCKET",
                 "0:30 Kill: 1022 3 22: <world> killed Bravo by MOD_FALLING"
         )).get(0);
 
@@ -37,10 +37,10 @@ class ParserQuakeTest {
     void deveAdicionarKillAoAtacante() {
         Jogo jogo = parser.processar(List.of(
                 "0:00 InitGame:",
-                "0:10 Kill: 2 3 10: Alpha killed Bravo by MOD_RAILGUN"
+                "0:10 Kill: 2 3 10: Alfa killed Bravo by MOD_RAILGUN"
         )).get(0);
 
-        assertEquals(1, jogo.getJogadores().get("Alpha").getKills());
+        assertEquals(1, jogo.getJogadores().get("Alfa").getKills());
     }
 
     @Test
@@ -58,7 +58,7 @@ class ParserQuakeTest {
     void deveSepararAsPartidas() {
         List<Jogo> jogos = parser.processar(List.of(
                 "0:00 InitGame:",
-                "0:10 Kill: 2 3 10: Alpha killed Bravo by MOD_RAILGUN",
+                "0:10 Kill: 2 3 10: Alfa killed Bravo by MOD_RAILGUN",
                 "1:00 InitGame:",
                 "1:10 Kill: 4 5 10: Charlie killed Delta by MOD_ROCKET"
         ));
