@@ -45,18 +45,23 @@ terminal em que ela está rodando.
 
 ## Executar o menu
 
-Com a API rodando no primeiro terminal, abra um segundo terminal e execute:
+Abra um terminal também com a pasta `quake-parser` aberta e compile o projeto:
 
 ```powershell
-mvn clean compile
+mvn compile
 java -cp target/classes br.com.quakeparser.Main
 ```
 
 No menu:
 
 1. escolha `1` para ver o relatório dos jogos e o ranking geral;
-2. escolha `2` para consultar uma partida pela API;
+2. escolha `2` para consultar uma partida pela API (a API precisa estar
+	rodando em outro terminal);
 3. escolha `3` para encerrar.
+
+A opção `1` funciona sem iniciar a API. Se a API já estiver rodando, use
+`mvn compile` em vez de `mvn clean compile`, pois o `clean` tenta apagar o jar
+que está sendo usado pelo processo da API.
 
 ## Testes
 
