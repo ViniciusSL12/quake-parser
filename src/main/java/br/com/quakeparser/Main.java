@@ -29,63 +29,63 @@ public class Main {
     }
 
     private static void executarMenu(List<Jogo> jogos) {
-    Scanner scanner = new Scanner(System.in);
-    boolean executando = true;
+        Scanner scanner = new Scanner(System.in);
+        boolean executando = true;
 
-    System.out.println("bem vindo ao Log do quake 3 arena!");
+        System.out.println("bem vindo ao Log do quake 3 arena!");
 
-    while (executando) {
-        System.out.println();
-        System.out.println("escolha uma opção abaixo:");
-        System.out.println("1 - ver relatório dos jogos");
-        System.out.println("2 - procurar um game específico");
-        System.out.println("3 - sair");
-        System.out.print("> ");
+        while (executando) {
+            System.out.println();
+            System.out.println("escolha uma opção abaixo:");
+            System.out.println("1 - ver relatório dos jogos");
+            System.out.println("2 - procurar um game específico");
+            System.out.println("3 - sair");
+            System.out.print("> ");
 
-        int opcao = lerInteiro(scanner);
+            int opcao = lerInteiro(scanner);
 
-        if (opcao == 1) {
-            GeradorRelatorio.imprimirRelatorioPorJogo(jogos);
-            GeradorRelatorio.imprimirRankingGeral(jogos);
+            if (opcao == 1) {
+                GeradorRelatorio.imprimirRelatorioPorJogo(jogos);
+                GeradorRelatorio.imprimirRankingGeral(jogos);
 
-        } else if (opcao == 2) {
-            procurarJogo(jogos, scanner);
+            } else if (opcao == 2) {
+                procurarJogo(jogos, scanner);
 
-        } else if (opcao == 3) {
-            executando = false;
-            System.out.println("encerrando aplicação...");
+            } else if (opcao == 3) {
+                executando = false;
+                System.out.println("encerrando aplicação...");
 
-        } else {
-            System.out.println("opção inválida.");
+            } else {
+                System.out.println("opção inválida.");
+            }
         }
-    }
 
-    scanner.close();
-}
+        scanner.close();
+    }
 
     private static void procurarJogo(List<Jogo> jogos, Scanner scanner) {
-    System.out.println("você possui " + jogos.size()
-            + " games. qual deseja ver? digite um número de 1 a " + jogos.size());
+        System.out.println("você possui " + jogos.size()
+                + " games. qual deseja ver? digite um número de 1 a " + jogos.size());
 
-    int numero = lerInteiro(scanner);
+        int numero = lerInteiro(scanner);
 
-    try {
-        ClienteApi clienteApi = new ClienteApi();
+        try {
+            ClienteApi clienteApi = new ClienteApi();
 
-        String resposta = clienteApi.buscarJogo(numero);
+            String resposta = clienteApi.buscarJogo(numero);
 
-        if (resposta != null) {
-            System.out.println();
-            System.out.println("resultado da consulta:");
-            System.out.println(resposta);
-        } else {
-            System.out.println("jogo não encontrado: game_" + numero);
+            if (resposta != null) {
+                System.out.println();
+                System.out.println("resultado da consulta:");
+                System.out.println(resposta);
+            } else {
+                System.out.println("jogo não encontrado: game_" + numero);
+            }
+
+        } catch (IOException | InterruptedException e) {
+            System.out.println("erro ao consultar a API: " + e.getMessage());
         }
-
-    } catch (IOException | InterruptedException e) {
-        System.out.println("erro ao consultar a API: " + e.getMessage());
     }
-}
 
     private static int lerInteiro(Scanner scanner) {
         if (scanner.hasNextInt()) {
