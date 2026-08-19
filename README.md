@@ -1,98 +1,76 @@
 # Quake Parser
 
-Parser em Java para o arquivo de log do Quake 3 Arena. O projeto implementa as
-três tarefas do exercício: leitura e agrupamento do `games.log`, relatório com
-ranking geral e API REST para consulta de uma partida.
+Parser em Java para o arquivo de log do Quake 3 Arena. O projeto lê e agrupa o
+`games.log`, gera um relatório com ranking geral e oferece uma API REST para
+consulta de partidas.
 
 ## Requisitos
 
-- JDK 17 ou superior;
-- Maven 3.8 ou superior;
+- JDK 21 ou superior;
+- Maven 3.9 ou superior;
 - `games.log` na raiz do projeto.
 
-Confira as versões instaladas:
-
-```bash
-java -version
-mvn -version
-```
-
-## Executar depois de clonar
-
-Abra no VS Code a raiz do projeto, a pasta que contém `pom.xml` e `games.log`.
-No terminal, execute os comandos a partir dessa pasta:
-
-```bash
-mvn clean package
-java -cp target/classes br.com.quakeparser.Main
-```
-
-O projeto exige Java 17 ou superior. Se o Maven informar que está usando Java
-8, configure `JAVA_HOME` para um JDK 17+ antes de executar os comandos.
-
-## Testes automatizados
-
-Execute todos os testes com:
-
-```bash
-mvn clean test
-```
-
-Os testes cobrem o parser, separação de partidas, contagem de mortes, regra do
-`<world>`, relatório, ranking e API. O resultado esperado é de 8 testes passando.
+Abra no VS Code a pasta `quake-parser`, que contém `pom.xml` e `games.log`.
+Execute os comandos a partir dessa pasta.
 
 ## Executar a API
 
-Gere o jar executável:
+No primeiro terminal, gere o jar executável:
 
-```bash
+```powershell
 mvn clean package
 ```
 
 Inicie a API Spring Boot:
 
-```bash
+```powershell
 java -jar target/quake-parser-1.0.0.jar
 ```
 
 O servidor inicia na porta `8080`. Em outro terminal, consulte uma partida:
 
-```bash
+```powershell
 curl http://localhost:8080/jogos/1
 ```
 
-Uma partida existente retorna `200` com os dados do jogo. Para validar o caso
-de partida inexistente:
+O endpoint implementado é `GET /jogos/{id}`. O ID `1` corresponde a `game_1`.
+Para consultar uma partida inexistente:
 
-```bash
+```powershell
 curl -i http://localhost:8080/jogos/999
 ```
 
-Nesse caso, a API retorna `404`. O endpoint implementado é:
+Nesse caso, a API retorna `404`. Para encerrar a API, pressione `Ctrl+C` no
+terminal em que ela está rodando.
 
-```text
-GET /jogos/{id}
-```
+## Executar o menu
 
-O ID `1` corresponde a `game_1`. A aplicação lê o arquivo `games.log` relativo
-ao diretório em que foi iniciada.
+Com a API rodando no primeiro terminal, abra um segundo terminal e execute:
 
-## Executar relatório e ranking
-
-O relatório em modo interativo é executado pela classe `Main`. Pela IDE, execute
-`br.com.quakeparser.Main`; ou, depois de compilar, use:
-
-```bash
+```powershell
+mvn clean compile
 java -cp target/classes br.com.quakeparser.Main
 ```
 
 No menu:
 
-1. escolha `1` para imprimir o relatório de cada jogo e o ranking geral;
+1. escolha `1` para ver o relatório dos jogos e o ranking geral;
 2. escolha `2` para consultar uma partida pela API;
 3. escolha `3` para encerrar.
 
-Para usar a opção `2`, mantenha a API em execução em outro terminal.
+## Testes
+
+Execute todos os testes com:
+
+```powershell
+mvn clean test
+```
+
+Antes de executar esse comando, pare a API com `Ctrl+C` caso ela esteja
+rodando. O Maven precisa substituir os arquivos dentro de `target`.
+
+Os testes cobrem o parser, a separação de partidas, a contagem de mortes, a
+regra do `<world>`, o relatório, o ranking e a API.
 
 ## Regras implementadas
 
@@ -119,5 +97,5 @@ Para usar a opção `2`, mantenha a API em execução em outro terminal.
 
 O parser recebe as linhas do log e não depende diretamente da camada HTTP. As
 responsabilidades estão separadas por domínio, interpretação, serviço,
-relatório e controlador, facilitando testes unitários e manutenção. O projeto
-usa Maven, JUnit 5, Spring Boot e commits pequenos por funcionalidade.
+relatório e controlador, facilitando os testes unitários e a manutenção. O
+projeto usa Maven, JUnit 5 e Spring Boot.
