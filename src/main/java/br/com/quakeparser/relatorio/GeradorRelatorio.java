@@ -1,8 +1,10 @@
-package br.com.quakeparser;
+package br.com.quakeparser.relatorio;
 
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+
+import br.com.quakeparser.dominio.Jogo;
 
 public class GeradorRelatorio {
 

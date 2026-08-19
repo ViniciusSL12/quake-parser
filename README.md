@@ -1,63 +1,110 @@
 # Quake Parser
 
-Parser em Java para o arquivo de log do Quake 3 Arena.
+Parser em Java para o arquivo de log do Quake 3 Arena. O projeto implementa as
+três tarefas do exercício: leitura e agrupamento do `games.log`, relatório com
+ranking geral e API REST para consulta de uma partida.
 
 ## Requisitos
 
-- Java 17 ou superior
-- Maven 3.8 ou superior
+- JDK 17 ou superior;
+- Maven 3.8 ou superior;
+- `games.log` na raiz do projeto.
 
-## Como executar
+Confira as versões instaladas:
 
-O arquivo `games.log` está na raiz do projeto.
+```bash
+java -version
+mvn -version
+```
 
-Para executar os testes:
+## Testes automatizados
+
+Execute todos os testes com:
 
 ```bash
 mvn clean test
 ```
 
-Para gerar o `.jar`:
+Os testes cobrem o parser, separação de partidas, contagem de mortes, regra do
+`<world>`, relatório, ranking e API. O resultado esperado é de 8 testes passando.
+
+## Executar a API
+
+Gere o jar executável:
 
 ```bash
 mvn clean package
 ```
 
-Depois:
+Inicie a API Spring Boot:
 
 ```bash
 java -jar target/quake-parser-1.0.0.jar
 ```
 
-Também é possível executar a classe `Main` diretamente pela IDE.
+O servidor inicia na porta `8080`. Em outro terminal, consulte uma partida:
 
-## Solução
+```bash
+curl http://localhost:8080/jogos/1
+```
 
-O programa lê o arquivo linha por linha e identifica o início de cada partida através de `InitGame:`.
+Uma partida existente retorna `200` com os dados do jogo. Para validar o caso
+de partida inexistente:
 
-As linhas que possuem `Kill:` são interpretadas pelo parser. A partir delas são identificados o jogador que matou e o jogador que morreu.
+```bash
+curl -i http://localhost:8080/jogos/999
+```
 
-Em uma morte normal, o atacante recebe um kill.
+Nesse caso, a API retorna `404`. O endpoint implementado é:
 
-Quando o atacante é `<world>`, ele não é considerado jogador e a vítima perde um kill.
+```text
+GET /jogos/{id}
+```
 
-O `total_kills` conta todas as mortes registradas, incluindo as causadas pelo `<world>`.
+O ID `1` corresponde a `game_1`. A aplicação lê o arquivo `games.log` relativo
+ao diretório em que foi iniciada.
 
-A solução foi dividida em algumas classes simples para separar as responsabilidades:
+## Executar relatório e ranking
 
-- `Main`: inicia a aplicação.
-- `LeitorLog`: lê o arquivo.
-- `ParserQuake`: interpreta as linhas.
-- `Jogo`: guarda os dados de uma partida.
-- `Jogador`: guarda o nome e a quantidade de kills.
+O relatório em modo interativo é executado pela classe `Main`. Pela IDE, execute
+`br.com.quakeparser.Main`; ou, depois de compilar, use:
 
-## Testes
+```bash
+java -cp target/classes br.com.quakeparser.Main
+```
 
-Foram adicionados testes para as principais regras da Task 1:
+No menu:
 
-- criação de partidas;
-- contagem de mortes;
-- kills dos jogadores;
-- penalidade causada pelo `<world>`;
-- `<world>` não aparecer como jogador;
-- separação de partidas.
+1. escolha `1` para imprimir o relatório de cada jogo e o ranking geral;
+2. escolha `2` para consultar uma partida pela API;
+3. escolha `3` para encerrar.
+
+Para usar a opção `2`, mantenha a API em execução em outro terminal.
+
+## Regras implementadas
+
+- Cada `InitGame:` inicia uma nova partida (`game_1`, `game_2`, ...).
+- Cada linha `Kill:` registra uma morte na partida atual.
+- `total_kills` inclui todas as mortes, inclusive as causadas por `<world>`.
+- Em uma morte causada por `<world>`, a vítima perde um kill.
+- `<world>` não aparece em `players` nem no mapa de kills.
+- Em uma morte normal, o atacante recebe um kill.
+- O ranking geral soma os kills do jogador em todas as partidas.
+
+## Organização do código
+
+- `dominio`: entidades `Jogo` e `Jogador`;
+- `interpretador`: leitura do arquivo e parsing das linhas;
+- `relatorio`: relatório por jogo e ranking geral;
+- `servico`: carregamento e busca de partidas;
+- `controlador`: endpoint REST `/jogos/{id}`;
+- `cliente`: cliente HTTP usado pelo menu;
+- `Main`: menu do relatório e consulta;
+- `QuakeParserApplication`: inicialização da API Spring Boot.
+
+## Solução e boas práticas
+
+O parser recebe as linhas do log e não depende diretamente da camada HTTP. As
+responsabilidades estão separadas por domínio, interpretação, serviço,
+relatório e controlador, facilitando testes unitários e manutenção. O projeto
+usa Maven, JUnit 5, Spring Boot e commits pequenos por funcionalidade.

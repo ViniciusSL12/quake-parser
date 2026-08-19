@@ -1,4 +1,4 @@
-package br.com.quakeparser;
+package br.com.quakeparser.interpretador;
 
 import java.io.IOException;
 import java.nio.file.Files;

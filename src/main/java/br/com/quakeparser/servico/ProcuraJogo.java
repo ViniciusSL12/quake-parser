@@ -1,7 +1,9 @@
-package br.com.quakeparser;
+package br.com.quakeparser.servico;
 
 import java.util.List;
 import java.util.Optional;
+
+import br.com.quakeparser.dominio.Jogo;
 
 public class ProcuraJogo {
 

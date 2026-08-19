@@ -1,4 +1,4 @@
-package br.com.quakeparser;
+package br.com.quakeparser.dominio;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;

@@ -1,8 +1,10 @@
-package br.com.quakeparser;
+package br.com.quakeparser.interpretador;
 
 import org.junit.jupiter.api.Test;
 
 import java.util.List;
+
+import br.com.quakeparser.dominio.Jogo;
 
 import static org.junit.jupiter.api.Assertions.*;
 
