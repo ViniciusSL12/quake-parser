@@ -14,7 +14,7 @@ import br.com.quakeparser.relatorio.GeradorRelatorio;
 public class Main {
 
     public static void main(String[] args) {
-        Path caminho = Path.of("games.log");
+        Path caminho = args.length > 0 ? Path.of(args[0]) : Path.of("games.log");
 
         try {
             LeitorLog leitor = new LeitorLog();

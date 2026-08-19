@@ -17,6 +17,19 @@ java -version
 mvn -version
 ```
 
+## Executar depois de clonar
+
+Abra no VS Code a raiz do projeto, a pasta que contém `pom.xml` e `games.log`.
+No terminal, execute os comandos a partir dessa pasta:
+
+```bash
+mvn clean package
+java -cp target/classes br.com.quakeparser.Main
+```
+
+O projeto exige Java 17 ou superior. Se o Maven informar que está usando Java
+8, configure `JAVA_HOME` para um JDK 17+ antes de executar os comandos.
+
 ## Testes automatizados
 
 Execute todos os testes com:
